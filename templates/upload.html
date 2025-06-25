@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Your Photo - Hustova</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .upload-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+            background-size: 200% 100%;
+            animation: shimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 200% 0; }
+            50% { background-position: -200% 0; }
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; 
+                   
+        }
+
+    
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)); }
+            50% { filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.4)); }
+        }
+
+        .brand-text {
+            text-align: center;
+            flex-grow: 0.8; /* allows it to expand and center */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .brand-small {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2px;
+            letter-spacing: 1px;
+        }
+
+        .tagline-small {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 10px;
+            margin-top: 15px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 35px;
+        }
+
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 40px 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-input-container:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(102, 126, 234, 0.6);
+        }
+
+        .file-input-container.dragover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .upload-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        .file-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 8px;
+        }
+
+        .upload-subtext {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 15px;
+        }
+
+        .file-info {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            display: none;
+        }
+
+        .upload-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+            disabled: false;
+        }
+
+        .upload-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .upload-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .upload-button:hover:not(:disabled)::before {
+            left: 100%;
+        }
+
+        .upload-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .upload-button:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 10px 15px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            transform: translateX(-2px);
+        }
+
+        .selected-files {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 12px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            display: none;
+        }
+
+        .file-list {
+            list-style: none;
+            text-align: left;
+        }
+
+        .file-item {
+            padding: 8px 0;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .file-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            .upload-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            
+        .logo {
+            width: 80px;
+            height: auto;
+            object-fit: contain;
+            max-width: 100px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            animation: logoGlow 3s ease-in-out infinite;
+            }
+            
+            .brand-small {
+                font-size: 20px;
+            }
+            
+            .logo-container {
+                gap: 20px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            .file-input-container {
+                padding: 30px 15px;
+            }
+            
+            .upload-button {
+                padding: 16px 35px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/welcome" class="back-button">← Back</a>
+    
+    <div class="upload-container">
+        <div class="header">
+            <div class="logo-container">
+                <img src="/images/hustovaNoBuffer.png" alt="Hustova Logo" class="logo" onerror="this.style.display='none'">
+                <div class="brand-text">
+                    <div class="brand-small">HUSTOVA</div>
+                    <div class="tagline-small">Powered By Dreams</div>
+                </div>
+            </div>
+            <h2>📸 Upload Your Pictures</h2>
+            <p class="subtitle">Share your magical moments with the world</p>
+        </div>
+
+        <form action="/upload" method="post" enctype="multipart/form-data" class="upload-form" id="uploadForm">
+            <div class="file-input-container" id="fileInputContainer">
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                    </svg>
+                </div>
+                <div class="upload-text">Choose photos or drag & drop</div>
+                <div class="upload-subtext">Select multiple images to upload</div>
+                <div class="file-info">Supports: JPG, PNG, GIF • Max 10MB each</div>
+                <input type="file" name="file" accept="image/*" multiple required class="file-input" id="fileInput">
+            </div>
+
+            <div class="selected-files" id="selectedFiles">
+                <h4 style="margin-bottom: 10px; color: rgba(255, 255, 255, 0.9);">Selected Files:</h4>
+                <ul class="file-list" id="fileList"></ul>
+            </div>
+
+            <button type="submit" class="upload-button" id="uploadButton">
+                <span class="loading-spinner" id="loadingSpinner"></span>
+                <span id="buttonText">Upload to Dreams</span>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('fileInput');
+            const fileInputContainer = document.getElementById('fileInputContainer');
+            const selectedFiles = document.getElementById('selectedFiles');
+            const fileList = document.getElementById('fileList');
+            const uploadButton = document.getElementById('uploadButton');
+            const uploadForm = document.getElementById('uploadForm');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const buttonText = document.getElementById('buttonText');
+
+            // Handle file selection
+            fileInput.addEventListener('change', function(e) {
+                updateFileList(e.target.files);
+            });
+
+            // Handle drag and drop
+            fileInputContainer.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                fileInputContainer.classList.add('dragover');
+            });
+
+            fileInputContainer.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                fileInputContainer.classList.remove('dragover');
+            });
+
+            fileInputContainer.addEventListener('drop', function(e) {
+                e.preventDefault();
+                fileInputContainer.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+                
+                if (imageFiles.length > 0) {
+                    // Create a new FileList-like object
+                    const dt = new DataTransfer();
+                    imageFiles.forEach(file => dt.items.add(file));
+                    fileInput.files = dt.files;
+                    updateFileList(imageFiles);
+                }
+            });
+
+            // Update file list display
+            function updateFileList(files) {
+                if (files.length > 0) {
+                    selectedFiles.style.display = 'block';
+                    fileList.innerHTML = '';
+                    
+                    Array.from(files).forEach(file => {
+                        const li = document.createElement('li');
+                        li.className = 'file-item';
+                        li.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                        fileList.appendChild(li);
+                    });
+                    
+                    uploadButton.disabled = false;
+                } else {
+                    selectedFiles.style.display = 'none';
+                    uploadButton.disabled = true;
+                }
+            }
+
+            // Handle form submission
+            uploadForm.addEventListener('submit', function(e) {
+                uploadButton.disabled = true;
+                loadingSpinner.style.display = 'inline-block';
+                buttonText.textContent = 'Uploading...';
+            });
+
+            // Initialize
+            uploadButton.disabled = true;
+
+            // Entrance animation
+            const container = document.querySelector('.upload-container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(30px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'all 0.6s ease-out';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thank You - Hustova</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Celebration confetti animation */
+        .confetti {
+            position: fixed;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #667eea;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        .confetti-piece:nth-child(odd) {
+            background: #764ba2;
+            width: 8px;
+            height: 8px;
+            animation-delay: 0.5s;
+        }
+
+        .confetti-piece:nth-child(3n) {
+            background: #f093fb;
+            width: 6px;
+            height: 6px;
+            animation-delay: 1s;
+        }
+
+        @keyframes confetti-fall {
+            0% { 
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .thank-you-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 50px 40px;
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .thank-you-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57);
+            background-size: 200% 100%;
+            animation: shimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 200% 0; }
+            50% { background-position: -200% 0; }
+        }
+
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: successPulse 2s ease-in-out infinite;
+            box-shadow: 0 15px 35px rgba(76, 205, 196, 0.3);
+        }
+
+        @keyframes successPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .success-icon svg {
+            width: 50px;
+            height: 50px;
+            fill: white;
+        }
+
+        .brand-small {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .tagline-small {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        .info-box {
+            background: rgba(76, 205, 196, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 30px 0;
+            border: 1px solid rgba(76, 205, 196, 0.2);
+        }
+
+        .info-box h3 {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 15px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 35px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px 25px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(240, 147, 251, 0.6);
+            animation: floatHearts 4s ease-in-out infinite;
+        }
+
+        .heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .heart:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .heart:nth-child(3) { left: 80%; animation-delay: 2s; }
+        .heart:nth-child(4) { left: 90%; animation-delay: 0.5s; }
+
+        @keyframes floatHearts {
+            0%, 100% { 
+                transform: translateY(20px);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translateY(-20px);
+                opacity: 0.8;
+            }
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            .thank-you-container {
+                padding: 40px 30px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            .success-message {
+                font-size: 16px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Confetti Animation -->
+    <div class="confetti" id="confetti"></div>
+
+    <div class="thank-you-container">
+        <div class="floating-hearts">
+            <div class="heart">💖</div>
+            <div class="heart">✨</div>
+            <div class="heart">🌟</div>
+            <div class="heart">💫</div>
+        </div>
+
+        <div class="brand-small">HUSTOVA</div>
+        <div class="tagline-small">Powered By Dreams</div>
+
+        <div class="success-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+        </div>
+
+        <h1>Thank You! 🎉</h1>
+        <p class="success-message">
+            Your photos have been successfully uploaded to our dream gallery! 
+            Thank you for sharing your magical moments with us.
+        </p>
+
+        <div class="info-box">
+            <h3>✨ What happens next?</h3>
+            <p>Your beautiful memories are now safely stored in the cloud and will be part of our collective dream experience. Other event guests can enjoy your shared moments!</p>
+        </div>
+
+        <div class="action-buttons">
+            <a href="/" class="btn btn-primary">Upload More Photos</a>
+            <a href="/welcome" class="btn btn-secondary">Back to Welcome</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create confetti animation
+            const confettiContainer = document.getElementById('confetti');
+            const colors = ['#667eea', '#764ba2', '#f093fb', '#4ecdc4', '#feca57'];
+            
+            function createConfetti() {
+                for (let i = 0; i < 50; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti-piece';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 3 + 's';
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    confettiContainer.appendChild(confetti);
+                }
+            }
+
+            // Initial confetti burst
+            createConfetti();
+
+            // Clean up confetti after animation
+            setTimeout(() => {
+                confettiContainer.innerHTML = '';
+            }, 6000);
+
+            // Entrance animation
+            const container = document.querySelector('.thank-you-container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(40px) scale(0.9)';
+            
+            setTimeout(() => {
+                container.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0) scale(1)';
+            }, 200);
+
+            // Success sound effect (optional - only if browser supports it)
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(1200, audioContext.currentTime + 0.2);
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                // Audio not supported, continue without sound
+            }
+        });
+    </script>
+</body>
+</html>
